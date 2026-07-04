@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Intelligence</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation (Left Panel) -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>AI Courtroom</h1>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <!-- Case File -->
+                <div class="nav-section">
+                    <div class="nav-section-title">Case File</div>
+                    <a class="nav-item active" data-target="dashboard-view" onclick="switchView('dashboard')">Dashboard</a>
+                    <a class="nav-item view-hidden workspace-nav" data-target="overview" onclick="switchTab('overview')">Overview</a>
+                    <a class="nav-item view-hidden workspace-nav" data-target="facts" onclick="switchTab('facts')">Facts</a>
+                </div>
+
+                <!-- Legal Analysis -->
+                <div class="nav-section view-hidden workspace-nav-group">
+                    <div class="nav-section-title">Legal Analysis</div>
+                    <a class="nav-item workspace-nav" data-target="offences" onclick="switchTab('offences')">Potential Offences</a>
+                    <a class="nav-item workspace-nav" data-target="laws" onclick="switchTab('laws')">Applicable Law</a>
+                </div>
+
+                <!-- Evidence -->
+                <div class="nav-section view-hidden workspace-nav-group">
+                    <div class="nav-section-title">Evidence</div>
+                    <a class="nav-item workspace-nav" data-target="evidence" onclick="switchTab('evidence')">Evidence Matrix</a>
+                </div>
+
+                <!-- Strategy -->
+                <div class="nav-section view-hidden workspace-nav-group">
+                    <div class="nav-section-title">Strategy</div>
+                    <a class="nav-item workspace-nav" data-target="precedents" onclick="switchTab('precedents')">Precedents</a>
+                    <a class="nav-item workspace-nav" data-target="strategy" onclick="switchTab('strategy')">Arguments</a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Dashboard View (Initial state) -->
+        <main class="dashboard-view" id="dashboard-view">
+            <div class="dashboard-content">
+                <div class="greeting">
+                    <h2>Good evening</h2>
+                    <h1>Case Intelligence</h1>
+                    <p>Review active matters and begin new analysis.</p>
+                </div>
+                
+                <div class="new-case-box">
+                    <label for="scenario-input">Describe a case, incident, or legal scenario</label>
+                    <textarea id="scenario-input" placeholder="e.g., At 10:30 PM, the victim reported..."></textarea>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="color: var(--text-secondary); font-size: 0.85rem;">Documents coming soon</span>
+                        <button class="btn-primary" id="analyze-btn">Analyze →</button>
+                    </div>
+                </div>
+
+                <div class="inspector-title">Recent Cases (Mocked)</div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Case</th>
+                            <th>Status</th>
+                            <th>Updated</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Assault Investigation</td>
+                            <td>Analysis</td>
+                            <td>2 hours ago</td>
+                        </tr>
+                        <tr>
+                            <td>Property Dispute</td>
+                            <td>Review</td>
+                            <td>Yesterday</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+        <!-- Main Workspace (Center Panel) -->
+        <main class="workspace-view view-hidden" id="workspace-view">
+            <div class="center-panel">
+                <div class="panel-header">
+                    <h2 id="workspace-title">Case Analysis</h2>
+                </div>
+                
+                <div class="panel-content">
+                    
+                    <!-- Overview Tab -->
+                    <div id="overview" class="tab-content active">
+                        <div class="details-card">
+                            <h3>Executive Summary</h3>
+                            <div class="legal-text" id="overview-summary">
+                                Processing...
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Facts Tab -->
+                    <div id="facts" class="tab-content">
+                        <div class="details-card">
+                            <h3>Extracted Facts</h3>
+                            <ul class="clean-list" id="facts-list">
+                                <!-- Populated dynamically -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Potential Offences Tab -->
+                    <div id="offences" class="tab-content">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Potential Offence</th>
+                                    <th>Legal Basis</th>
+                                    <th>Validation</th>
+                                </tr>
+                            </thead>
+                            <tbody id="offences-tbody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                        <div id="offences-details" class="details-card view-hidden">
+                            <!-- Populated on click -->
+                        </div>
+                    </div>
+
+                    <!-- Laws Tab -->
+                    <div id="laws" class="tab-content">
+                        <div id="laws-container"></div>
+                    </div>
+
+                    <!-- Evidence Tab -->
+                    <div id="evidence" class="tab-content">
+                        <div class="details-card">
+                            <h3>Available Evidence</h3>
+                            <ul class="clean-list" id="evidence-available"></ul>
+                        </div>
+                        <div class="details-card">
+                            <h3>Missing Evidence</h3>
+                            <ul class="clean-list" id="evidence-missing"></ul>
+                        </div>
+                    </div>
+
+                    <!-- Precedents Tab -->
+                    <div id="precedents" class="tab-content">
+                        <div id="precedents-list"></div>
+                    </div>
+
+                    <!-- Strategy Tab -->
+                    <div id="strategy" class="tab-content">
+                        <div class="details-card">
+                            <h3>Prosecution Strategy</h3>
+                            <ul class="clean-list" id="strategy-pros"></ul>
+                        </div>
+                        <div class="details-card">
+                            <h3>Defense Strategy</h3>
+                            <ul class="clean-list" id="strategy-def"></ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Analysis Inspector (Right Panel) -->
+            <aside class="right-panel">
+                <div class="inspector-section">
+                    <div class="inspector-title">Analysis Trace</div>
+                    <ul class="trace-list" id="trace-list">
+                        <li class="trace-item"><span>Scenario Parsing</span><span class="trace-status" id="trace-scenario">Wait</span></li>
+                        <li class="trace-item"><span>Fact Extraction</span><span class="trace-status" id="trace-facts">Wait</span></li>
+                        <li class="trace-item"><span>Offence Discovery</span><span class="trace-status" id="trace-offences">Wait</span></li>
+                        <li class="trace-item"><span>Law Retrieval</span><span class="trace-status" id="trace-laws">Wait</span></li>
+                        <li class="trace-item"><span>Evidence Analysis</span><span class="trace-status" id="trace-evidence">Wait</span></li>
+                        <li class="trace-item"><span>Validation</span><span class="trace-status" id="trace-validation">Wait</span></li>
+                        <li class="trace-item"><span>Strategy</span><span class="trace-status" id="trace-strategy">Wait</span></li>
+                    </ul>
+                </div>
+            </aside>
+        </main>
+
+    </div>
+    
+    <script src="/static/app.js"></script>
+</body>
+</html>
