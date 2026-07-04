@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Type, Optional
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 from app.models.context import CaseContext
 from app.core.config import settings
 from app.core.logging import AgentLoggingCallbackHandler
@@ -11,12 +12,23 @@ class BaseAgent(ABC):
 
     def get_llm(self, schema: Optional[Type] = None):
         """Returns a configured LLM with the centralized logging callback."""
-        llm = ChatGoogleGenerativeAI(
-            model=settings.GEMINI_MODEL,
-            temperature=0.0,
-            api_key=settings.GEMINI_API_KEY,
-            callbacks=[AgentLoggingCallbackHandler(self.name)]
-        )
+        callbacks = [AgentLoggingCallbackHandler(self.name)]
+        
+        if settings.ACTIVE_LLM_PROVIDER.lower() == "groq":
+            llm = ChatGroq(
+                model_name=settings.GROQ_MODEL,
+                temperature=0.0,
+                groq_api_key=settings.GROQ_API_KEY,
+                callbacks=callbacks
+            )
+        else:
+            llm = ChatGoogleGenerativeAI(
+                model=settings.GEMINI_MODEL,
+                temperature=0.0,
+                api_key=settings.GEMINI_API_KEY,
+                callbacks=callbacks
+            )
+            
         if schema:
             return llm.with_structured_output(schema)
         return llm

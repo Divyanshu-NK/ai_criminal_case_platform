@@ -7,8 +7,8 @@ logger = logging.getLogger("agent_logger")
 
 class QdrantManager:
     def __init__(self):
-        # Uses local disk storage instead of a Docker container
-        self.client = QdrantClient(path="./qdrant_data")
+        # Connects to the Docker Qdrant instance
+        self.client = QdrantClient(url="http://localhost:6333", timeout=60)
         self.vector_size = 384 # Since we use all-MiniLM-L6-v2
         
     def create_collection(self, collection_name: str):

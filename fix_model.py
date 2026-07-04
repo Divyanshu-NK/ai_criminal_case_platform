@@ -8,7 +8,7 @@ for root, _, files in os.walk(agent_dir):
             with open(path, "r", encoding="utf-8") as file:
                 content = file.read()
             updated = False
-            for old_model in ['gemini-1.5-pro', 'gemini-2.5-pro', 'gemini-1.5-flash']:
+            for old_model in ['gemini-3.5-flash', 'gemini-2.5-pro', 'gemini-2.5-flash']:
                 if old_model in content:
                     content = content.replace(old_model, 'gemini-2.5-flash')
                     updated = True
